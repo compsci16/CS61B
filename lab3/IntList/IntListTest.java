@@ -66,8 +66,49 @@ public class IntListTest {
         assertEquals(IntList.of(1, 2, 3), A);
     }
 
-    /** If you're running this from the command line, you'll need
-      * to add a main method. See ArithmeticTest.java for an
-      * example. */
+    /* If you're running this from the command line, you'll need
+     * to add a main method. See ArithmeticTest.java for an
+     * example. */
+    @Test
+    public void testReverse() {
+        IntList l1 = IntList.of(1);
+        IntList.reverse(l1);
+        assertEquals(IntList.of(1), l1);
+
+        l1 = IntList.of(1, 2);
+        l1 = IntList.reverse(l1);
+        assertEquals(IntList.of(2, 1), l1);
+
+        l1 = IntList.of(1, 2, 3);
+        l1 = IntList.reverse(l1);
+        assertEquals(IntList.of(3, 2, 1), l1);
+
+
+        l1 = IntList.of(1, 2, 3, 4, 5);
+        l1 = IntList.reverse(l1);
+        assertEquals(IntList.of(5, 4, 3, 2, 1), l1);
+        assertNotEquals(IntList.of(1, 2, 3, 4, 5), l1);
+        assertNull(IntList.reverse(null));
+    }
+    @Test
+    public void testRecursiveReverse() {
+        IntList l1 = IntList.of(1);
+        IntList.recursiveReverse(l1);
+        assertEquals(IntList.of(1), l1);
+
+        l1 = IntList.of(1, 2);
+        l1 = IntList.recursiveReverse(l1);
+        assertEquals(IntList.of(2, 1), l1);
+
+        l1 = IntList.of(1, 2, 3);
+        l1 = IntList.recursiveReverse(l1);
+        assertEquals(IntList.of(3, 2, 1), l1);
+
+        l1 = IntList.of(1, 2, 3, 4, 5);
+        l1 = IntList.recursiveReverse(l1);
+        assertEquals(IntList.of(5, 4, 3, 2, 1), l1);
+        assertNotEquals(IntList.of(1, 2, 3, 4, 5), l1);
+        assertNull(IntList.reverse(null));
+    }
 
 }

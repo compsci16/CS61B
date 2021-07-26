@@ -1,11 +1,15 @@
 import static org.junit.Assert.*;
+
+import jh61b.junit.TestRunner;
 import org.junit.Test;
 
 public class ArithmeticTest {
 
-    /** Performs a few arbitrary tests to see if the product method is correct */
+    /**
+     * Performs a few arbitrary tests to see if the product method is correct
+     */
 
-    @Test 
+    @Test
     public void testProduct() {
         /* assertEquals for comparison of ints takes two arguments:
         assertEquals(expected, actual).
@@ -17,9 +21,11 @@ public class ArithmeticTest {
         assertEquals(0, Arithmetic.product(0, -6));
     }
 
-    /** Performs a few arbitrary tests to see if the sum method is correct */
+    /**
+     * Performs a few arbitrary tests to see if the sum method is correct
+     */
 
-    @Test 
+    @Test
     public void testSum() {
 
         assertEquals(11, Arithmetic.sum(5, 6));
@@ -29,7 +35,7 @@ public class ArithmeticTest {
     }
 
     /* Run the unit tests in this file. */
-    public static void main(String... args) {        
-        jh61b.junit.TestRunner.runTests("all", ArithmeticTest.class);
+    public static void main(String[] args) {
+        TestRunner.runTests("all", ArithmeticTest.class);
     }
 }
