@@ -179,11 +179,11 @@ public class IntList {
      * read or understand this method.
      */
     public boolean equals(Object x) {
-        if (!(x instanceof IntList L)) {
+        if (!(x instanceof IntList)) {
             return false;
         }
         IntList p;
-
+        IntList L = (IntList) x;
         for (p = this; p != null && L != null; p = p.rest, L = L.rest) {
             if (p.first != L.first) {
                 return false;
