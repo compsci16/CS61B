@@ -17,17 +17,12 @@ public class LLDTest {
 
     @Test
     public void testAddFirst() {
-        LinkedListDeque<Integer> d = new LinkedListDeque<>();
         d.addFirst(2);
     }
 
     @Test
     public void testAddLast() {
-        LinkedListDeque<Integer> d = new LinkedListDeque<>();
-        d.addLast(5);
-        d.addFirst(2);
-        d.addFirst(1);
-        d.addLast(10);
+        d.addLast(100);
     }
 
     @Test

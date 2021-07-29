@@ -49,4 +49,7 @@ public class AList<T> {
         size--;
         return last;
     }
+
 }
+
+

@@ -30,20 +30,28 @@ public class ArrayDeque<T> {
 
 
     public T removeFirst() {
+        if (isEmpty()) {
+            return null;
+        }
         int firstIndex = getFirstIndex();
         T firstItem = items[firstIndex];
         items[firstIndex] = null;
         nextFirst = incrementIndex(nextFirst);
         size--;
+        resizeIfRequired();
         return firstItem;
     }
 
     public T removeLast() {
+        if (isEmpty()) {
+            return null;
+        }
         int lastIndex = getLastIndex();
         T lastItem = items[lastIndex];
         items[lastIndex] = null;
         nextLast = decrementIndex(nextLast);
         size--;
+        resizeIfRequired();
         return lastItem;
     }
 
@@ -58,15 +66,17 @@ public class ArrayDeque<T> {
 
     private int getFirstIndex() {
         int first = nextFirst + 1;
-        if (first == items.length)
+        if (first == items.length) {
             first = 0;
+        }
         return first;
     }
 
     private int getLastIndex() {
         int last = nextLast - 1;
-        if (last == -1)
+        if (last == -1) {
             last = items.length - 1;
+        }
         return last;
     }
 
@@ -78,17 +88,19 @@ public class ArrayDeque<T> {
 
     private int decrementIndex(int index) {
         index = (index - 1);
-        if (index == -1)
+        if (index == -1) {
             index = items.length - 1;
+        }
         return index;
     }
 
     private void resizeIfRequired() {
         int length = items.length;
-        if (size == length)
+        if (size == length) {
             resize(length * REFACTOR);
-        else if (length >= 16 && (1.0 * size / length) < LOAD_FACTOR)
+        } else if (length >= 16 && (1.0 * size / length) < LOAD_FACTOR) {
             resize(length / REFACTOR);
+        }
     }
 
     private void resize(int capacity) {
@@ -110,8 +122,9 @@ public class ArrayDeque<T> {
     public T get(int index) {
         int firstIndex = getFirstIndex();
         int getIndex = firstIndex + index;
-        if (getIndex > items.length - 1)
+        if (getIndex > items.length - 1) {
             getIndex = ((items.length - 1) - (getIndex));
+        }
         return items[getIndex];
     }
 

@@ -83,6 +83,10 @@ public class ALTest {
             d.addFirst(i);
             expectedOutput.append(999 - i).append(" ");
         }
+        for (int i = 0; i < 999; i++) {
+            d.removeLast();
+        }
+
         expectedOutput.append("\n");
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
