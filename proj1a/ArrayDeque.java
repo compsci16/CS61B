@@ -120,7 +120,9 @@ public class ArrayDeque<T> {
 
 
     public T get(int index) {
-        if (isEmpty()) return null;
+        if (isEmpty()) {
+            return null;
+        }
         int firstIndex = getFirstIndex();
         int getIndex = firstIndex + index;
         if (getIndex > items.length - 1) {

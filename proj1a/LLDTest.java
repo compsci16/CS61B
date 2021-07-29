@@ -64,5 +64,15 @@ public class LLDTest {
             i = d.removeLast();
         }
         assertNull(i);
+        d = new LinkedListDeque<>();
+        d.addFirst(0);
+        d.removeFirst();     // ==> 0
+        d.addFirst(2);
+        d.addFirst(3);
+        d.addFirst(4);
+        d.addFirst(5);
+        d.addFirst(6);
+        d.addFirst(7);
+        assertEquals(Integer.valueOf(2), d.removeLast());
     }
 }
