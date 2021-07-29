@@ -1,11 +1,11 @@
-public class AList<T> {
+public class ArrayDequeTest<T> {
     private final T[] list;
     private int size;
 
     /**
      * Creates an empty list.
      */
-    public AList() {
+    public ArrayDequeTest() {
         list = (T[]) new Object[8];
         size = 0;
     }

@@ -96,12 +96,18 @@ public class ALTest {
 
     @Test
     public void testGet() {
-        for (int i = 0; i < 1000; i++) {
-            d.addLast(i);
-        }
-        for (int i = 0; i < 1000; i++) {
-            assertEquals(Integer.valueOf(i), d.get(i));
-        }
+        d.addFirst(0);
+        d.get(0);
+        d.removeFirst();
+        d.addFirst(3);
+        d.addLast(4);
+        d.addFirst(5);
+        d.addFirst(6);
+        d.removeFirst();
+        d.addFirst(8);
+        d.addFirst(9);
+        assertEquals(Integer.valueOf(4), d.get(4));
+        assertEquals(Integer.valueOf(3), d.get(3));
     }
 
 }
