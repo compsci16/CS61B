@@ -13,15 +13,16 @@ public class Palindrome {
     }
 
     private boolean isPalindrome(Deque<Character> word, CharacterComparator c) {
-        if (word.size() == 0 || word.size() == 1)
+        if (word.size() == 0 || word.size() == 1) {
             return true;
+        }
         Character last = word.removeLast();
         Character first = word.removeFirst();
 
         if (!c.equalChars(last, first)) {
             return false;
         }
-        return isPalindrome(word,c);
+        return isPalindrome(word, c);
     }
 
 
@@ -31,13 +32,15 @@ public class Palindrome {
     }
 
     private boolean isPalindrome(Deque<Character> word) {
-        if (word.size() == 0 || word.size() == 1)
+        if (word.size() == 0 || word.size() == 1) {
             return true;
+        }
         Character last = word.removeLast();
         Character first = word.removeFirst();
 
-        if (!last.equals(first))
+        if (!last.equals(first)) {
             return false;
+        }
         return isPalindrome(word);
     }
 }
