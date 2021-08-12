@@ -15,14 +15,12 @@ public class World {
     private final int HEIGHT;
     private final ArrayDeque<Room> rooms = new ArrayDeque<>();
     private final ArrayList<Position> roomWalls = new ArrayList<>();
-    private final int RECURSION_DEPTH_LIMIT;
 
     public World(long seed, TETile[][] tiles, int width, int height) {
         this.RANDOM = new Random(seed);
         this.world = tiles;
         this.WIDTH = width;
         this.HEIGHT = height;
-        RECURSION_DEPTH_LIMIT = 5;
     }
 
     public void render() {
@@ -62,7 +60,9 @@ public class World {
 //            makeRandomRoom(bottomLeft, topRight);
 //            return;
 //        }
-        if (Position.areaBound(bottomLeft, topRight) <= (WIDTH * HEIGHT) / (10)) {
+        if (Position.areaBound(bottomLeft, topRight)
+                <=
+                (WIDTH * HEIGHT) / (7 + RANDOM.nextInt(5))) {
             makeRandomRoom(bottomLeft, topRight);
             return;
         }
