@@ -1,8 +1,5 @@
 package byog.Core;
 
-
-import java.util.Random;
-
 public class Position {
     private final int x;
     private final int y;
@@ -22,13 +19,23 @@ public class Position {
     }
 
     @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        return result;
+    }
+
+    @Override
     public boolean equals(Object o) {
-        if (o == null)
+        if (o == null) {
             return false;
-        if (o == this)
+        }
+        if (o == this) {
             return true;
-        if (!(o.getClass() == this.getClass()))
+        }
+        if (!(o.getClass() == this.getClass())) {
             return false;
+        }
         Position other = (Position) o;
         return other.x == this.x && other.y == this.y;
     }
@@ -41,8 +48,9 @@ public class Position {
         return Math.abs(p1.y - p2.y);
     }
 
+    // assuming p1, p2 are corners of a rectangle
     public static int areaBound(Position p1, Position p2) {
-        return xDistance(p1, p2) * yDistance(p1, p2);
+        return (xDistance(p1, p2) - 1) * (yDistance(p1, p2) - 1);
     }
 
     public boolean isRightOf(Position p2) {

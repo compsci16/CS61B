@@ -5,25 +5,24 @@ import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class World {
-    private final long SEED;
     private final Random RANDOM;
     private final TETile[][] world;
     private final int WIDTH;
     private final int HEIGHT;
-    private boolean occupied[][];
-    private ArrayDeque<Room> rooms = new ArrayDeque<>();
+    private final ArrayDeque<Room> rooms = new ArrayDeque<>();
+    private final ArrayList<Position> roomWalls = new ArrayList<>();
+    private final int RECURSION_DEPTH_LIMIT;
 
-    public World(long SEED, TETile[][] tiles, int width, int height) {
-        this.SEED = SEED;
-        this.RANDOM = new Random(SEED);
+    public World(long seed, TETile[][] tiles, int width, int height) {
+        this.RANDOM = new Random(seed);
         this.world = tiles;
         this.WIDTH = width;
         this.HEIGHT = height;
-        this.occupied = new boolean[width][height];
+        RECURSION_DEPTH_LIMIT = 5 + RANDOM.nextInt(2);
     }
 
     public void render() {
@@ -31,6 +30,7 @@ public class World {
         split();
         connectRooms();
         placeCorridorWalls();
+        placeRandomLockedDoor();
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         ter.renderFrame(world);
@@ -52,68 +52,70 @@ public class World {
     private void split(Position bottomLeft, Position topRight, int recursionDepth) {
         String direction = getRandomOrientation();
         // stop after 4 splitting iterations
-
-        if (recursionDepth == 4) {
+        if (recursionDepth == RECURSION_DEPTH_LIMIT) {
             makeRandomRoom(bottomLeft, topRight);
             return;
         }
         recursionDepth++;
-        switch (direction) {
-            case "vertical": {
-                // splitVertically(bottomLeft, topRight);
-                // calculate positions for splitting the left side
-                // bottomLeft will remain same and the topRight's y will remain same but
-                // the new X will be halved
-                int midX = (bottomLeft.x() + topRight.x()) / 2;
-                Position midTopRight = new Position(midX, topRight.y());
-                split(bottomLeft, midTopRight, recursionDepth);
+        if ("vertical".equals(direction)) { // splitVertically(bottomLeft, topRight);
+            // calculate positions for splitting the left side
+            // bottomLeft will remain same and the topRight's y will remain same but
+            // the new X will be halved
+            int midX = (bottomLeft.x() + topRight.x()) / 2;
+            Position midTopRight = new Position(midX, topRight.y());
+            split(bottomLeft, midTopRight, recursionDepth);
 
-                // for right half:
-                Position midBottomLeft = new Position(midX, bottomLeft.y());
-                split(midBottomLeft, topRight, recursionDepth);
-                break;
-            }
+            // for right half:
+            Position midBottomLeft = new Position(midX, bottomLeft.y());
+            split(midBottomLeft, topRight, recursionDepth);
             // case horizontal
-            default: {
-                // splitHorizontally(bottomLeft, topRight);
-                int midY = (bottomLeft.y() + topRight.y()) / 2;
+        } else { // splitHorizontally(bottomLeft, topRight);
+            int midY = (bottomLeft.y() + topRight.y()) / 2;
 
-                // for top half:
-                Position midTopLeft = new Position(bottomLeft.x(), midY);
-                split(midTopLeft, topRight, recursionDepth);
+            // for top half:
+            Position midTopLeft = new Position(bottomLeft.x(), midY);
+            split(midTopLeft, topRight, recursionDepth);
 
-                // for bottom half:
-                Position midTopRight = new Position(topRight.x(), midY);
-                split(bottomLeft, midTopRight, recursionDepth);
-            }
-
+            // for bottom half:
+            Position midTopRight = new Position(topRight.x(), midY);
+            split(bottomLeft, midTopRight, recursionDepth);
         }
     }
 
 
     private void makeRandomRoom(Position bottomLeft, Position topRight) {
-        if (Position.areaBound(bottomLeft, topRight) <= 7)
+        if (Position.areaBound(bottomLeft, topRight) <= 0) {
             return;
-        int width, height;
-        do {
-            //
-            width = RANDOM.nextInt(Position.xDistance(bottomLeft, topRight) - 1); // -1 because of walls
-            height = RANDOM.nextInt(Position.yDistance(bottomLeft, topRight) - 1); // -1 because of walls
-        } while (width <= 0 || height <= 0);
-
-        /* TODO - add randomness to room generation; rn we start at bottom left coordinate,
-                  you should be able to start at a different reasonable coordinate
-         */
+        }
         // +1 to not collide with the walls
-        int x = bottomLeft.x() + 1;
-        int y = bottomLeft.y() + 1;
-        for (int i = x; i <= x + width; i++) {
-            for (int j = y; j <= y + height; j++) {
-                world[i][j] = Tileset.GRASS;
+        int leftX = bottomLeft.x() + 1; // minimum
+        int rightX = topRight.x() - 1; // maximum
+
+        int bottomY = bottomLeft.y() + 1;
+        int topY = topRight.y() - 1;
+
+        if (rightX - leftX <= 1 || topY - bottomY <= 1) {
+            return;
+        }
+        int x1 = leftX + RANDOM.nextInt(rightX - leftX + 1);
+        int x2 = leftX + RANDOM.nextInt(rightX - leftX + 1);
+        int roomLeftX = Math.min(x1, x2);
+        int roomRightX = Math.max(x1, x2);
+
+
+        int y1 = bottomY + RANDOM.nextInt(topY - bottomY + 1);
+        int y2 = bottomY + RANDOM.nextInt(topY - bottomY + 1);
+        int roomBottomY = Math.min(y1, y2);
+        int roomTopY = Math.max(y1, y2);
+
+        for (int i = roomLeftX; i <= roomRightX; i++) {
+            for (int j = roomBottomY; j <= roomTopY; j++) {
+                world[i][j] = Tileset.FLOOR;
             }
         }
 
-        Room room = new Room(new Position(x, y), new Position(x + width, y + height));
+        Room room = new Room(new Position(roomLeftX, roomBottomY),
+                new Position(roomRightX, roomTopY));
         placeWallsAroundRoom(room);
         // adjacent rooms will be added adjacently in the deque
         rooms.add(room);
@@ -141,17 +143,17 @@ public class World {
 
         if (bottomPoint.isRightOf(topPoint)) {
             for (int i = startX; i >= endX; i--) {
-                world[i][startY] = Tileset.GRASS;
+                world[i][startY] = Tileset.FLOOR;
             }
             for (int i = startY; i <= endY; i++) {
-                world[endX][i] = Tileset.GRASS;
+                world[endX][i] = Tileset.FLOOR;
             }
         } else {
             for (int i = startX; i <= endX; i++) {
-                world[i][startY] = Tileset.GRASS;
+                world[i][startY] = Tileset.FLOOR;
             }
             for (int i = startY; i <= endY; i++) {
-                world[endX][i] = Tileset.GRASS;
+                world[endX][i] = Tileset.FLOOR;
             }
         }
 
@@ -166,31 +168,37 @@ public class World {
         int endY = topRight.y() + 1;
         // left vertical wall
         for (int i = startY; i <= endY; i++) {
-            world[startX][i] = Tileset.WALL;
+            world[startX][i] = getColoredWall();
+            roomWalls.add(new Position(startX, i));
         }
 
         // top horizontal wall
         for (int i = startX; i <= endX; i++) {
-            world[i][endY] = Tileset.WALL;
+            world[i][endY] = getColoredWall();
+            roomWalls.add(new Position(i, endY));
         }
 
         // right vertical wall
         for (int i = endY; i >= startY; i--) {
-            world[endX][i] = Tileset.WALL;
+            world[endX][i] = getColoredWall();
+            roomWalls.add(new Position(endX, i));
         }
 
         // bottom horizontal wall
         for (int i = endX; i >= startX; i--) {
-            world[i][startY] = Tileset.WALL;
+            world[i][startY] = getColoredWall();
+            roomWalls.add(new Position(i, startY));
         }
     }
 
     private void placeCorridorWalls() {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
-                // if it's a grass, then check if there is nothing at top and bottom => horizontal corridor
-                if (!world[i][j].equals(Tileset.GRASS))
+                // if it's a FLOOR, then check if there is nothing at top and bottom
+                // => horizontal corridor
+                if (!world[i][j].equals(Tileset.FLOOR)) {
                     continue;
+                }
 
                 Position[] neighbouringPositions = new Position[8];
                 int c = 0;
@@ -203,11 +211,47 @@ public class World {
                 }
                 for (Position p : neighbouringPositions) {
                     if (isNothingAtPosition(p)) {
-                        world[p.x()][p.y()] = Tileset.WALL;
+                        world[p.x()][p.y()] = getColoredWall();
                     }
                 }
             }
         }
+    }
+
+    private TETile getColoredWall() {
+        return TETile.colorVariant(Tileset.WALL, 50, 50, 50, RANDOM);
+    }
+
+    private void placeRandomLockedDoor() {
+        Position lockPos;
+        do {
+            int pos = RANDOM.nextInt(roomWalls.size());
+            lockPos = roomWalls.get(pos);
+        } while (!isAdjacentToFloorAndNothing(lockPos));
+        world[lockPos.x()][lockPos.y()] = Tileset.LOCKED_DOOR;
+    }
+
+    private boolean isAdjacentToFloorAndNothing(Position p) {
+        int i = p.x();
+        int j = p.y();
+        int[] neighbourXs = {i, i, i + 1, i - 1};
+        int[] neighbourYs = {j + 1, j - 1, j, j};
+        int floorCount = 0;
+        int nothingCount = 0;
+        for (int k = 0; k < 4; k++) {
+            Position current = new Position(neighbourXs[k], neighbourYs[k]);
+            if (isInvalidPosition(current)) {
+                continue;
+            }
+            if (world[current.x()][current.y()].equals(Tileset.FLOOR)) {
+                floorCount++;
+                continue;
+            }
+            if (world[current.x()][current.y()].equals(Tileset.NOTHING)) {
+                nothingCount++;
+            }
+        }
+        return floorCount == 1 && nothingCount == 1;
     }
 
     private boolean isNothingAtPosition(Position p) {
@@ -218,6 +262,7 @@ public class World {
     private boolean isInvalidPosition(Position p) {
         return !(p.x() >= 0 && p.y() >= 0 && p.x() < WIDTH && p.y() < HEIGHT);
     }
+
 
     private void splitVertically(Position bottomLeft, Position topRight) {
         int midX = (bottomLeft.x() + topRight.x()) / 2;
@@ -235,12 +280,10 @@ public class World {
 
     private String getRandomOrientation() {
         int direction = RANDOM.nextInt(2);
-        switch (direction) {
-            case 0:
-                return "horizontal";
-            default:
-                return "vertical";
+        if (direction == 0) {
+            return "horizontal";
         }
+        return "vertical";
     }
 
 
