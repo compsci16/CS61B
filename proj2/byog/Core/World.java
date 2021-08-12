@@ -54,12 +54,21 @@ public class World {
 
     private void split(Position bottomLeft, Position topRight, int recursionDepth) {
         String direction = getRandomOrientation();
-        // stop after 4 splitting iterations
-        if (recursionDepth == RECURSION_DEPTH_LIMIT) {
+        if (((topRight.y() - bottomLeft.y()) <= 5)
+                ||
+                ((topRight.x() - bottomLeft.x()) <= 5)
+                ||
+                Position.areaBound(bottomLeft, topRight) <= (WIDTH * HEIGHT) / (100)) {
             makeRandomRoom(bottomLeft, topRight);
             return;
         }
-        recursionDepth++;
+
+        // stop after 4 splitting iterations
+//        if (recursionDepth == RECURSION_DEPTH_LIMIT) {
+//            makeRandomRoom(bottomLeft, topRight);
+//            return;
+//        }
+        // recursionDepth++;
         if ("vertical".equals(direction)) { // splitVertically(bottomLeft, topRight);
             // calculate positions for splitting the left side
             // bottomLeft will remain same and the topRight's y will remain same but
@@ -100,16 +109,13 @@ public class World {
         if (rightX - leftX <= 1 || topY - bottomY <= 1) {
             return;
         }
-        int x1 = leftX + RANDOM.nextInt(rightX - leftX + 1);
-        int x2 = leftX + RANDOM.nextInt(rightX - leftX + 1);
-        int roomLeftX = Math.min(x1, x2);
-        int roomRightX = Math.max(x1, x2);
+        int[] xs = getRandom1dCoordinatesInRange(leftX, rightX, leftX);
+        int roomLeftX = xs[0];
+        int roomRightX = xs[1];
 
-
-        int y1 = bottomY + RANDOM.nextInt(topY - bottomY + 1);
-        int y2 = bottomY + RANDOM.nextInt(topY - bottomY + 1);
-        int roomBottomY = Math.min(y1, y2);
-        int roomTopY = Math.max(y1, y2);
+        int[] ys = getRandom1dCoordinatesInRange(bottomY, topY, bottomY);
+        int roomBottomY = ys[0];
+        int roomTopY = ys[1];
 
         for (int i = roomLeftX; i <= roomRightX; i++) {
             for (int j = roomBottomY; j <= roomTopY; j++) {
@@ -122,6 +128,21 @@ public class World {
         placeWallsAroundRoom(room);
         // adjacent rooms will be added adjacently in the deque
         rooms.add(room);
+    }
+
+    private int[] getRandom1dCoordinatesInRange(int start, int upper, int lower) {
+        int x1 = getBounded(start, upper, lower);
+        int x2;
+        do {
+            x2 = getBounded(start, upper, lower);
+        } while (x2 == x1);
+        int min = Math.min(x1, x2);
+        int max = Math.max(x1, x2);
+        return new int[]{min, max};
+    }
+
+    private int getBounded(int start, int upper, int lower) {
+        return start + RANDOM.nextInt(upper - lower + 1);
     }
 
     // since adjacent rooms were added together, we may remove two rooms at once and connect them
