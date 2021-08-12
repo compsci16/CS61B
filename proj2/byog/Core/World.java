@@ -54,15 +54,18 @@ public class World {
 
     private void split(Position bottomLeft, Position topRight, int recursionDepth) {
         String direction = getRandomOrientation();
-        if (((topRight.y() - bottomLeft.y()) <= 5)
-                ||
-                ((topRight.x() - bottomLeft.x()) <= 5)
-                ||
-                Position.areaBound(bottomLeft, topRight) <= (WIDTH * HEIGHT) / (100)) {
+//        if (((topRight.y() - bottomLeft.y()) <= 5)
+//                ||
+//                ((topRight.x() - bottomLeft.x()) <= 5)
+//                ||
+//                Position.areaBound(bottomLeft, topRight) <= (WIDTH * HEIGHT) / (10)) {
+//            makeRandomRoom(bottomLeft, topRight);
+//            return;
+//        }
+        if (Position.areaBound(bottomLeft, topRight) <= (WIDTH * HEIGHT) / (10)) {
             makeRandomRoom(bottomLeft, topRight);
             return;
         }
-
         // stop after 4 splitting iterations
 //        if (recursionDepth == RECURSION_DEPTH_LIMIT) {
 //            makeRandomRoom(bottomLeft, topRight);
