@@ -26,23 +26,27 @@ public class World {
     }
 
     public void render() {
-        initialize();
-        split();
-        connectRooms();
-        placeCorridorWalls();
-        placeRandomLockedDoor();
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         ter.renderFrame(world);
     }
 
+    public TETile[][] getWorld() {
+        System.out.println(world);
+        return world;
+    }
+
     // fill with nothingness
-    private void initialize() {
+    public void initialize() {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 world[i][j] = Tileset.NOTHING;
             }
         }
+        split();
+        connectRooms();
+        placeCorridorWalls();
+        placeRandomLockedDoor();
     }
 
     private void split() {
