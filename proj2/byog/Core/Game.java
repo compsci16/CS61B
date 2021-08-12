@@ -29,11 +29,9 @@ public class Game {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
         long seed = Long.parseLong(input.substring(1, input.length() - 1));
-        System.out.println(seed);
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
         World w = new World(seed, tiles, WIDTH, HEIGHT);
         w.initialize();

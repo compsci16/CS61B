@@ -159,7 +159,6 @@ public class HexWorld {
         int s = 3;
         int x = (WIDTH) / 2 - s / 2 - s;
         int y = HEIGHT / 2 - 3 * s / 2;
-        System.out.println(x);
         creator.addHexagon(world, new Position(x, y), s, Tileset.FLOWER);
         // draws the world to the screen
         ter.renderFrame(world);

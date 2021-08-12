@@ -22,7 +22,7 @@ public class World {
         this.world = tiles;
         this.WIDTH = width;
         this.HEIGHT = height;
-        RECURSION_DEPTH_LIMIT = 5 + RANDOM.nextInt(2);
+        RECURSION_DEPTH_LIMIT = 5;
     }
 
     public void render() {
@@ -32,7 +32,6 @@ public class World {
     }
 
     public TETile[][] getWorld() {
-        System.out.println(world);
         return world;
     }
 
