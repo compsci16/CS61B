@@ -13,8 +13,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         arr = (T[]) new Object[capacity];
     }
 
-    @Override
-    public String toString() {
+    protected String getString() {
         StringBuilder q = new StringBuilder();
         for (int i = first; i < capacity; i++) {
             if (arr[i] == null) {
@@ -89,6 +88,10 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
 
     @Override
     public T peek() {
+        if (isEmpty()) {
+            throw new RuntimeException("Ring Buffer Underflow");
+        }
         return arr[first];
     }
+
 }
