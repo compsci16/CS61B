@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
     private int first, last;
-    private T arr[];
+    private final T[] arr;
 
     public ArrayRingBuffer(int capacity) {
         first = -1;
@@ -17,13 +17,15 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
     public String toString() {
         StringBuilder q = new StringBuilder();
         for (int i = first; i < capacity; i++) {
-            if (arr[i] == null)
+            if (arr[i] == null) {
                 break;
+            }
             q.append(arr[i]).append(" ");
         }
         for (int i = 0; i < first; i++) {
-            if (arr[i] == null)
+            if (arr[i] == null) {
                 break;
+            }
             q.append(arr[i]).append(" ");
         }
         return q.toString().trim();
@@ -38,7 +40,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         private int ptr;
         private int iterateThrough;
 
-        public BufferIterator() {
+        BufferIterator() {
             ptr = first;
             iterateThrough = 0;
         }
@@ -59,10 +61,12 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
 
     @Override
     public void enqueue(T x) {
-        if (isFull())
+        if (isFull()) {
             throw new RuntimeException("Ring  Buffer Overflow");
-        if (isEmpty())
+        }
+        if (isEmpty()) {
             first = last;
+        }
         fillCount++;
         arr[last] = x;
         last = limitTheIndex(++last);
@@ -70,8 +74,9 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
 
     @Override
     public T dequeue() {
-        if (isEmpty())
+        if (isEmpty()) {
             throw new RuntimeException("Ring Buffer Underflow");
+        }
         fillCount--;
         T toRemove = arr[first];
         first = limitTheIndex(++first);

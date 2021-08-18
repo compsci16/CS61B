@@ -1,6 +1,5 @@
 package synthesizer;
 
-import edu.princeton.cs.algs4.In;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +35,7 @@ public class TestArrayRingBuffer {
         assertEquals("0 1 2 3", arb.toString());
     }
 
-    private static Integer Int(int x) {
+    private static Integer toInt(int x) {
         return x;
     }
 
@@ -46,16 +45,16 @@ public class TestArrayRingBuffer {
         assertEquals(Integer.valueOf(0), arb.dequeue());
         arb.enqueue(0);
         arb.enqueue(1);
-        assertEquals(Int(0), arb.dequeue());
-        assertEquals(Int(1), arb.peek());
+        assertEquals(toInt(0), arb.dequeue());
+        assertEquals(toInt(1), arb.peek());
 
         arb.enqueue(2);
         arb.enqueue(3);
         arb.enqueue(4);
 
-        assertEquals(Int(1), arb.peek());
+        assertEquals(toInt(1), arb.peek());
         assertEquals(4, arb.fillCount());
-        assertEquals(Int(1), arb.dequeue());
+        assertEquals(toInt(1), arb.dequeue());
     }
 
     @Test
