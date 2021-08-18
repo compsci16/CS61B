@@ -13,22 +13,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         arr = (T[]) new Object[capacity];
     }
 
-    protected String getString() {
-        StringBuilder q = new StringBuilder();
-        for (int i = first; i < capacity; i++) {
-            if (arr[i] == null) {
-                break;
-            }
-            q.append(arr[i]).append(" ");
-        }
-        for (int i = 0; i < first; i++) {
-            if (arr[i] == null) {
-                break;
-            }
-            q.append(arr[i]).append(" ");
-        }
-        return q.toString().trim();
-    }
+
 
     @Override
     public Iterator<T> iterator() {
