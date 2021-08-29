@@ -21,8 +21,8 @@ public class World implements Serializable {
     private Position playerPos;
     private final TERenderer ter;
     private Position lockedDoorPos;
-
-    public World(long seed, TETile[][] tiles, int width, int height) {
+    private final boolean isTextualWorld;
+    public World(long seed, TETile[][] tiles, int width, int height, boolean isTextualWorld) {
         this.RANDOM = new Random(seed);
         this.world = tiles;
         this.WIDTH = width;
@@ -30,10 +30,13 @@ public class World implements Serializable {
         ter = new TERenderer();
         int xOff = 0;
         int yOff = 1;
+        this.isTextualWorld = isTextualWorld;
+        if(!isTextualWorld)
         ter.initialize(WIDTH + xOff, HEIGHT + yOff);
     }
 
-    public void render() {
+    public void render(){
+        if(!isTextualWorld)
         ter.renderFrame(world);
     }
 

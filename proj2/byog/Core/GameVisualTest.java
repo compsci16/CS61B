@@ -17,10 +17,10 @@ public class GameVisualTest {
 
     @Test
     public void testInputStringPlay() throws IOException, ClassNotFoundException {
-        TETile[][] worldKey = g.playWithInputString("n8772076153521736045sawsasdsadwwwwsa");
+        TETile[][] worldKey=g.playWithInputString("n8772076153521736045sawsasdsadwwwwsa");
         TERenderer ter = new TERenderer();
-        ter.initialize(worldKey.length, worldKey[0].length);
-        ter.renderFrame(worldKey);
+//        ter.initialize(worldKey.length, worldKey[0].length);
+//        ter.renderFrame(worldKey);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class GameVisualTest {
     }
 
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args)throws IOException, ClassNotFoundException {
         Game g = new Game();
         TETile[][] worldKey = g.playWithInputString("N500SDWA");
         TERenderer ter = new TERenderer();

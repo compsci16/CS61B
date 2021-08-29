@@ -19,7 +19,7 @@ public class WorldVisualTest {
 //            w = new World(i, tiles, WIDTH, HEIGHT);
 //            w.initialize();
 //        }
-        World w = new World(System.nanoTime(), tiles, WIDTH, HEIGHT);
+        World w = new World(System.nanoTime(), tiles, WIDTH, HEIGHT, false);
         w.initialize();
         w.render();
     }

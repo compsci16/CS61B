@@ -193,7 +193,10 @@ public class UserInterface {
 
     private void loadNewGame(long seed) {
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
-        w = new World(seed, tiles, WIDTH, HEIGHT);
+        if (playingWithInputString)
+            w = new World(seed, tiles, WIDTH, HEIGHT, true);
+        else
+            w = new World(seed, tiles, WIDTH, HEIGHT, false);
         w.initialize();
         if (!playingWithInputString) {
             w.render();
