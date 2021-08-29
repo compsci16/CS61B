@@ -7,7 +7,9 @@ import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.Color;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class World implements Serializable {
     private final Random RANDOM;
@@ -20,6 +22,7 @@ public class World implements Serializable {
     private final TERenderer ter;
     private Position lockedDoorPos;
     private final boolean isTextualWorld;
+
     public World(long seed, TETile[][] tiles, int width, int height, boolean isTextualWorld) {
         this.RANDOM = new Random(seed);
         this.world = tiles;
@@ -29,13 +32,15 @@ public class World implements Serializable {
         int xOff = 0;
         int yOff = 1;
         this.isTextualWorld = isTextualWorld;
-        if(!isTextualWorld)
-        ter.initialize(WIDTH + xOff, HEIGHT + yOff);
+        if (!isTextualWorld) {
+            ter.initialize(WIDTH + xOff, HEIGHT + yOff);
+        }
     }
 
-    public void render(){
-        if(!isTextualWorld)
-        ter.renderFrame(world);
+    public void render() {
+        if (!isTextualWorld) {
+            ter.renderFrame(world);
+        }
     }
 
 

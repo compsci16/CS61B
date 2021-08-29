@@ -87,8 +87,9 @@ public class UserInterface {
         Position p;
         boolean hasWon = false;
         do {
-            if (moves.size() == 0)
+            if (moves.size() == 0) {
                 return;
+            }
             String move = getMove().toUpperCase();
             switch (move) {
                 // north
@@ -199,10 +200,11 @@ public class UserInterface {
 
     private void loadNewGame(long seed) {
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
-        if (playingWithInputString)
+        if (playingWithInputString) {
             w = new World(seed, tiles, WIDTH, HEIGHT, true);
-        else
+        } else {
             w = new World(seed, tiles, WIDTH, HEIGHT, false);
+        }
         w.initialize();
         if (!playingWithInputString) {
             w.render();

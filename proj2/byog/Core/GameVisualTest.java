@@ -8,7 +8,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class GameVisualTest {
@@ -20,14 +19,11 @@ public class GameVisualTest {
     }
 
     @Test
-    public void testInputStringPlay() throws IOException, ClassNotFoundException {
+    public void testInputStringPlay() {
         TETile[][] world1 = g.playWithInputString("N999SDDDWWWDDD");
         TETile[][] world2 = g.playWithInputString("N999SDDD:Q");
         world2 = g.playWithInputString("LWWWDDD");
         assertTrue(Arrays.deepEquals(world1, world2));
-        //      TERenderer ter = new TERenderer();
-//        ter.initialize(worldKey.length, worldKey[0].length);
-//        ter.renderFrame(worldKey);
     }
 
     @Test
