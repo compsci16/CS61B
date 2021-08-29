@@ -4,6 +4,7 @@ import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.Serializable;
 
 /**
  * Utility class for rendering tiles. You do not need to modify this file. You're welcome
@@ -11,7 +12,7 @@ import java.awt.Font;
  * messing with this renderer, unless you're trying to do something fancy like
  * allowing scrolling of the screen or tracking the player or something similar.
  */
-public class TERenderer {
+public class TERenderer implements Serializable {
     private static final int TILE_SIZE = 16;
     private int width;
     private int height;
@@ -53,7 +54,7 @@ public class TERenderer {
      * you then subsequently call renderFrame with a TETile[50][25] array, it will
      * leave 10 tiles blank on the right side and 5 tiles blank on the top side. If
      * you want to leave extra space on the left or bottom instead, use the other
-     * initializatiom method.
+     * initialization method.
      * @param w width of the window in tiles
      * @param h height of the window in tiles.
      */

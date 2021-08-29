@@ -3,6 +3,9 @@ package byog.Core;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 public class Game {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
@@ -13,6 +16,8 @@ public class Game {
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
+        UserInterface c = new UserInterface(WIDTH, HEIGHT);
+        c.start();
     }
 
     /**
@@ -31,11 +36,12 @@ public class Game {
     public TETile[][] playWithInputString(String input) {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-        long seed = Long.parseLong(input.substring(1, input.length() - 1));
-        TETile[][] tiles = new TETile[WIDTH][HEIGHT];
-        World w = new World(seed, tiles, WIDTH, HEIGHT);
-        w.initialize();
-        TETile[][] finalWorldFrame = w.getWorld();
-        return finalWorldFrame;
+        Queue<String> moves = new ArrayDeque<>();
+        for (int i = 0; i < input.length(); i++) {
+            moves.add(input.substring(i, i + 1));
+        }
+        UserInterface c = new UserInterface(WIDTH, HEIGHT,moves);
+        c.playWithKeyboard();
+        return c.getWorld();
     }
 }

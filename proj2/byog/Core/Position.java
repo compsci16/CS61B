@@ -1,22 +1,8 @@
 package byog.Core;
 
-public class Position {
-    private final int x;
-    private final int y;
+import java.io.Serializable;
 
-    public Position(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-
-    public int x() {
-        return x;
-    }
-
-    public int y() {
-        return y;
-    }
+public record Position(int x, int y) implements Serializable {
 
     @Override
     public int hashCode() {

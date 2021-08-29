@@ -3,30 +3,54 @@ package byog.Core;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
-
+import edu.princeton.cs.introcs.StdDraw;
+import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class World {
+public class World implements Serializable {
     private final Random RANDOM;
     private final TETile[][] world;
     private final int WIDTH;
     private final int HEIGHT;
     private final ArrayDeque<Room> rooms = new ArrayDeque<>();
     private final ArrayList<Position> roomWalls = new ArrayList<>();
+    private Position playerPos;
+    private final TERenderer ter;
+    private Position lockedDoorPos;
 
     public World(long seed, TETile[][] tiles, int width, int height) {
         this.RANDOM = new Random(seed);
         this.world = tiles;
         this.WIDTH = width;
         this.HEIGHT = height;
+        ter = new TERenderer();
+        int xOff = 0;
+        int yOff = 1;
+        ter.initialize(WIDTH + xOff, HEIGHT + yOff);
     }
 
     public void render() {
-        TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
         ter.renderFrame(world);
+    }
+
+
+    public void displayMousePosition() {
+
+        double mouseX = StdDraw.mouseX();
+        double mouseY = StdDraw.mouseY();
+        int gridX = (int) Math.floor(mouseX);
+        int gridY = (int) Math.floor(mouseY);
+
+        Position mouse = new Position(gridX, gridY);
+        if (isInvalidPosition(mouse)) return;
+        // if (world[mouse.x()][mouse.y()].description().equals(mouseState)) return;
+        this.render();
+        StdDraw.setPenColor(Color.white);
+        StdDraw.textLeft(0, HEIGHT - 1, world[gridX][gridY].description());
+        StdDraw.show();
     }
 
     public TETile[][] getWorld() {
@@ -44,6 +68,15 @@ public class World {
         connectRooms();
         placeCorridorWalls();
         placeRandomLockedDoor();
+        placePlayerRandomly();
+    }
+
+    public Position getPlayerPos() {
+        return playerPos;
+    }
+
+    public boolean isLockedDoor(Position p) {
+        return world[p.x()][p.y()].equals(Tileset.LOCKED_DOOR);
     }
 
     private void split() {
@@ -96,7 +129,6 @@ public class World {
             split(bottomLeft, midTopRight, recursionDepth);
         }
     }
-
 
     private void makeRandomRoom(Position bottomLeft, Position topRight) {
         if (Position.areaBound(bottomLeft, topRight) <= 0) {
@@ -252,10 +284,10 @@ public class World {
     private void placeRandomLockedDoor() {
         Position lockPos;
         do {
-            int pos = RANDOM.nextInt(roomWalls.size());
-            lockPos = roomWalls.get(pos);
+            lockPos = getRandomRoomWall();
         } while (!isAdjacentToFloorAndNothing(lockPos));
         world[lockPos.x()][lockPos.y()] = Tileset.LOCKED_DOOR;
+        lockedDoorPos = lockPos;
     }
 
     private boolean isAdjacentToFloorAndNothing(Position p) {
@@ -285,9 +317,65 @@ public class World {
         return !isInvalidPosition(p) && world[p.x()][p.y()].equals(Tileset.NOTHING);
     }
 
-
     private boolean isInvalidPosition(Position p) {
         return !(p.x() >= 0 && p.y() >= 0 && p.x() < WIDTH && p.y() < HEIGHT);
+    }
+
+    private Position getRandomFloor() {
+        Position wallPos = getRandomRoomWall();
+        int x = wallPos.x();
+        int y = wallPos.y();
+        int direction = RANDOM.nextInt(4);
+        // 0 - N, 1 - S, 2 - E, 3 - W
+        switch (direction) {
+            case 0 -> {
+                Position p = new Position(x, y + 1);
+                if (isFloor(p)) {
+                    return p;
+                }
+            }
+            case 1 -> {
+                Position p = new Position(x, y - 1);
+                if (isFloor(p)) {
+                    return p;
+                }
+            }
+            case 2 -> {
+                Position p = new Position(x + 1, y);
+                if (isFloor(p)) {
+                    return p;
+                }
+            }
+            case 3 -> {
+                Position p = new Position(x - 1, y);
+                if (isFloor(p)) {
+                    return p;
+                }
+            }
+        }
+        return getRandomFloor();
+    }
+
+    private void placePlayerRandomly() {
+        playerPos = getRandomFloor();
+        world[playerPos.x()][playerPos.y()] = Tileset.PLAYER;
+    }
+
+    public void placePlayerAtPosition(Position p) {
+        if (playerPos == null)
+            throw new RuntimeException("Player Does Not exist");
+        world[playerPos.x()][playerPos.y()] = Tileset.FLOOR;
+        playerPos = p;
+        world[p.x()][p.y()] = Tileset.PLAYER;
+    }
+
+    public boolean isFloor(Position p) {
+        return !isInvalidPosition(p) && world[p.x()][p.y()].equals(Tileset.FLOOR);
+    }
+
+    private Position getRandomRoomWall() {
+        int pos = RANDOM.nextInt(roomWalls.size());
+        return roomWalls.get(pos);
     }
 
 
@@ -314,4 +402,7 @@ public class World {
     }
 
 
+    public void openLockedDoor() {
+        world[lockedDoorPos.x()][lockedDoorPos.y()] = Tileset.UNLOCKED_DOOR;
+    }
 }
