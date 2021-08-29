@@ -5,6 +5,8 @@ import byog.TileEngine.TETile;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class GameVisualTest {
     private Game g;
 
@@ -14,7 +16,7 @@ public class GameVisualTest {
     }
 
     @Test
-    public void testKeyboardPlay() {
+    public void testKeyboardPlay() throws IOException, ClassNotFoundException {
         TETile[][] worldKey = g.playWithInputString("N500SDWA");
         TERenderer ter = new TERenderer();
         ter.initialize(worldKey.length, worldKey[0].length);
@@ -22,12 +24,12 @@ public class GameVisualTest {
     }
 
     @Test
-    public void testScreenPlay() {
+    public void testScreenPlay() throws IOException, ClassNotFoundException {
         g.playWithKeyboard();
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         Game g = new Game();
         TETile[][] worldKey = g.playWithInputString("N500SDWA");
         TERenderer ter = new TERenderer();

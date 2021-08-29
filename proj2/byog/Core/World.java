@@ -4,7 +4,8 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 import edu.princeton.cs.introcs.StdDraw;
-import java.awt.*;
+
+import java.awt.Color;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -45,7 +46,9 @@ public class World implements Serializable {
         int gridY = (int) Math.floor(mouseY);
 
         Position mouse = new Position(gridX, gridY);
-        if (isInvalidPosition(mouse)) return;
+        if (isInvalidPosition(mouse)) {
+            return;
+        }
         // if (world[mouse.x()][mouse.y()].description().equals(mouseState)) return;
         this.render();
         StdDraw.setPenColor(Color.white);
@@ -327,31 +330,32 @@ public class World implements Serializable {
         int y = wallPos.y();
         int direction = RANDOM.nextInt(4);
         // 0 - N, 1 - S, 2 - E, 3 - W
+        Position p;
         switch (direction) {
-            case 0 -> {
-                Position p = new Position(x, y + 1);
+            case 0:
+                p = new Position(x, y + 1);
                 if (isFloor(p)) {
                     return p;
                 }
-            }
-            case 1 -> {
-                Position p = new Position(x, y - 1);
+                break;
+            case 1:
+                p = new Position(x, y - 1);
                 if (isFloor(p)) {
                     return p;
                 }
-            }
-            case 2 -> {
-                Position p = new Position(x + 1, y);
+                break;
+            case 2:
+                p = new Position(x + 1, y);
                 if (isFloor(p)) {
                     return p;
                 }
-            }
-            case 3 -> {
-                Position p = new Position(x - 1, y);
+                break;
+            default:
+                p = new Position(x - 1, y);
                 if (isFloor(p)) {
                     return p;
                 }
-            }
+                break;
         }
         return getRandomFloor();
     }
@@ -362,8 +366,9 @@ public class World implements Serializable {
     }
 
     public void placePlayerAtPosition(Position p) {
-        if (playerPos == null)
+        if (playerPos == null) {
             throw new RuntimeException("Player Does Not exist");
+        }
         world[playerPos.x()][playerPos.y()] = Tileset.FLOOR;
         playerPos = p;
         world[p.x()][p.y()] = Tileset.PLAYER;

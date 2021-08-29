@@ -3,8 +3,13 @@ package byog.Core;
 import byog.TileEngine.TETile;
 import edu.princeton.cs.introcs.StdDraw;
 
-import java.awt.*;
-import java.io.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Queue;
@@ -18,18 +23,18 @@ public class UserInterface {
     private Queue<String> moves;
     private boolean playingWithKeyboard;
 
-    public UserInterface(int WIDTH, int HEIGHT) {
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
+    public UserInterface(int width, int height) {
+        this.WIDTH = width;
+        this.HEIGHT = height;
     }
 
-    public UserInterface(int WIDTH, int HEIGHT, Queue<String> moves) {
-        this(WIDTH, HEIGHT);
+    public UserInterface(int width, int height, Queue<String> moves) {
+        this(width, height);
         this.playingWithKeyboard = true;
         this.moves = moves;
     }
 
-    public void playWithKeyboard() {
+    public void playWithKeyboard() throws IOException, ClassNotFoundException {
         executeCommand(moves.poll()); // N or L or Q at the beginning of keyboard string.
     }
 
@@ -37,19 +42,19 @@ public class UserInterface {
         return w.getWorld();
     }
 
-    public void start() {
+    public void start() throws IOException, ClassNotFoundException {
         displayInitScreen();
         executeCommand(solicitNCharsInput(1));
     }
 
-    private void executeCommand(String command) {
+    private void executeCommand(String command) throws IOException, ClassNotFoundException {
         System.out.println(command);
         switch (command.toUpperCase()) {
-            case "N" -> {
+            case "N":
                 long seed;
-                if (playingWithKeyboard)
+                if (playingWithKeyboard) {
                     seed = getSeedFromKeyboard();
-                else {
+                } else {
                     drawFrame("(N)ew Game\n(L)oad\n(Q)uit\n \nEnter Seed");
                     seed = getSeedOnScreen();
                 }
@@ -57,49 +62,57 @@ public class UserInterface {
                 loadNewGame(seed);
                 playing = true;
                 playGame();
-            }
-            case "L" -> {
+                break;
+            case "L":
                 loadPrevious();
                 playing = true;
                 playGame();
-            }
-            case "Q" -> System.exit(0);
-            default -> throw new IllegalArgumentException();
+                break;
+            case "Q":
+                System.exit(0);
+                break;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 
     private void playGame() {
         int x = w.getPlayerPos().x();
         int y = w.getPlayerPos().y();
-        if (playingWithKeyboard && moves.size() == 0)
+        if (playingWithKeyboard && moves.size() == 0) {
             return;
+        }
 
         Position p;
         boolean hasWon = false;
         do {
             String move = getMove();
             switch (move) {
-                case "W" -> {// north
+                // north
+                case "W":
                     p = new Position(x, y + 1);
-                }
-                case "S" -> { // south
+                    break;
+                // south
+                case "S":
                     p = new Position(x, y - 1);
-                }
-                case "D" -> { // west
+                    break;
+                // west
+                case "D":
                     p = new Position(x + 1, y);
-                }
-                case "A" -> { // east
+                    break;
+                // east
+                case "A":
                     p = new Position(x - 1, y);
-                }
-                default -> { // pressed :
-                    // command :Q saves and exits the game.
+                    break;
+                // pressed :
+                // command :Q saves and exits the game.
+                default:
                     if (solicitNCharsInput(1).equalsIgnoreCase("Q")) {
                         saveCurrentState();
                         System.exit(0);
                     }
                     playGame();
                     return;
-                }
             }
             if (w.isLockedDoor(p)) {
                 hasWon = true;
@@ -108,13 +121,15 @@ public class UserInterface {
         } while (!w.isFloor(p));
         if (hasWon) {
             w.openLockedDoor();
-            if (!playingWithKeyboard)
+            if (!playingWithKeyboard) {
                 w.render();
+            }
             return;
         }
         w.placePlayerAtPosition(p);
-        if (!playingWithKeyboard)
+        if (!playingWithKeyboard) {
             w.render();
+        }
         playGame();
     }
 
@@ -133,17 +148,13 @@ public class UserInterface {
 
     }
 
-    private void loadPrevious() {
-        try {
-            FileInputStream fileInputStream
-                    = new FileInputStream("load.txt");
-            ObjectInputStream objectInputStream
-                    = new ObjectInputStream(fileInputStream);
-            w = (World) objectInputStream.readObject();
-            objectInputStream.close();
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
+    private void loadPrevious() throws IOException, ClassNotFoundException {
+        FileInputStream fileInputStream
+                = new FileInputStream("load.txt");
+        ObjectInputStream objectInputStream
+                = new ObjectInputStream(fileInputStream);
+        w = (World) objectInputStream.readObject();
+        objectInputStream.close();
     }
 
 
@@ -168,8 +179,9 @@ public class UserInterface {
                     keepGoing = false;
                     continue;
                 }
-                if (!(48 <= typedKey && typedKey <= 57))
+                if (!(48 <= typedKey && typedKey <= 57)) {
                     throw new IllegalArgumentException();
+                }
                 s.append(typedKey);
                 drawFrame("(N)ew Game\n(L)oad\n(Q)uit\n \nEnter Seed\n" + s);
             }
@@ -182,8 +194,9 @@ public class UserInterface {
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
         w = new World(seed, tiles, WIDTH, HEIGHT);
         w.initialize();
-        if (!playingWithKeyboard)
+        if (!playingWithKeyboard) {
             w.render();
+        }
     }
 
 
@@ -192,8 +205,9 @@ public class UserInterface {
         StringBuilder s = new StringBuilder();
         int i = 0;
         while (i < n) {
-            if (playing)
+            if (playing) {
                 w.displayMousePosition();
+            }
             while (StdDraw.hasNextKeyTyped() && i < n) {
                 s.append(StdDraw.nextKeyTyped());
                 ++i;
@@ -203,8 +217,9 @@ public class UserInterface {
     }
 
     public String getMove() {
-        if (playingWithKeyboard)
+        if (playingWithKeyboard) {
             return moves.poll();
+        }
 
         String move;
         Set<String> permittedKeys = new HashSet<>(Arrays.asList("W", "A", "S", "D", ":"));

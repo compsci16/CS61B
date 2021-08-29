@@ -3,6 +3,7 @@ package byog.Core;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
@@ -15,7 +16,7 @@ public class Game {
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
      */
-    public void playWithKeyboard() {
+    public void playWithKeyboard() throws IOException, ClassNotFoundException {
         UserInterface c = new UserInterface(WIDTH, HEIGHT);
         c.start();
     }
@@ -33,14 +34,14 @@ public class Game {
      * @param input the input string to feed to your program
      * @return the 2D TETile[][] representing the state of the world
      */
-    public TETile[][] playWithInputString(String input) {
+    public TETile[][] playWithInputString(String input) throws IOException, ClassNotFoundException {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
         Queue<String> moves = new ArrayDeque<>();
         for (int i = 0; i < input.length(); i++) {
             moves.add(input.substring(i, i + 1));
         }
-        UserInterface c = new UserInterface(WIDTH, HEIGHT,moves);
+        UserInterface c = new UserInterface(WIDTH, HEIGHT, moves);
         c.playWithKeyboard();
         return c.getWorld();
     }

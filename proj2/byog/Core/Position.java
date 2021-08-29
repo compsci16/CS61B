@@ -1,8 +1,18 @@
 package byog.Core;
 
+import java.io.Serial;
 import java.io.Serializable;
 
-public record Position(int x, int y) implements Serializable {
+public final class Position implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 0L;
+    private final int x;
+    private final int y;
+
+    public Position(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     @Override
     public int hashCode() {
@@ -42,4 +52,22 @@ public record Position(int x, int y) implements Serializable {
     public boolean isRightOf(Position p2) {
         return this.x > p2.x;
     }
+
+    public int x() {
+        return x;
+    }
+
+    public int y() {
+        return y;
+    }
+
+    @Override
+    public String toString() {
+        return "Position["
+                +
+                "x=" + x + ", "
+                +
+                "y=" + y + ']';
+    }
+
 }
