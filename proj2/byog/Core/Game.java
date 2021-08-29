@@ -34,15 +34,20 @@ public class Game {
      * @param input the input string to feed to your program
      * @return the 2D TETile[][] representing the state of the world
      */
-    public TETile[][] playWithInputString(String input) throws IOException, ClassNotFoundException {
+    public TETile[][] playWithInputString(String input) {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-        Queue<String> moves = new ArrayDeque<>();
-        for (int i = 0; i < input.length(); i++) {
-            moves.add(input.substring(i, i + 1));
+        UserInterface c;
+        try {
+            Queue<String> moves = new ArrayDeque<>();
+            for (int i = 0; i < input.length(); i++) {
+                moves.add(input.substring(i, i + 1));
+            }
+            c = new UserInterface(WIDTH, HEIGHT, moves);
+            c.playWithKeyboard();
+        } catch (IOException | ClassNotFoundException e) {
+            return null;
         }
-        UserInterface c = new UserInterface(WIDTH, HEIGHT, moves);
-        c.playWithKeyboard();
         return c.getWorld();
     }
 }
