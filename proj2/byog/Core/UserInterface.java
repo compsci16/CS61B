@@ -21,16 +21,17 @@ public class UserInterface {
     private boolean playing;
     private World w;
     private Queue<String> moves;
-    private boolean playingWithKeyboard;
+    private boolean playingWithInputString;
 
     public UserInterface(int width, int height) {
         this.WIDTH = width;
         this.HEIGHT = height;
+        this.playingWithInputString = false;
     }
 
     public UserInterface(int width, int height, Queue<String> moves) {
         this(width, height);
-        this.playingWithKeyboard = true;
+        this.playingWithInputString = true;
         this.moves = moves;
     }
 
@@ -52,13 +53,13 @@ public class UserInterface {
         switch (command.toUpperCase()) {
             case "N":
                 long seed;
-                if (playingWithKeyboard) {
-                    seed = getSeedFromKeyboard();
+                if (playingWithInputString) {
+                    seed = getSeedFromInputString();
                 } else {
                     drawFrame("(N)ew Game\n(L)oad\n(Q)uit\n \nEnter Seed");
                     seed = getSeedOnScreen();
                 }
-               // System.out.println(seed);
+                // System.out.println(seed);
                 loadNewGame(seed);
                 playing = true;
                 playGame();
@@ -79,14 +80,14 @@ public class UserInterface {
     private void playGame() {
         int x = w.getPlayerPos().x();
         int y = w.getPlayerPos().y();
-        if (playingWithKeyboard && moves.size() == 0) {
+        if (playingWithInputString && moves.size() == 0) {
             return;
         }
 
         Position p;
         boolean hasWon = false;
         do {
-            String move = getMove();
+            String move = getMove().toUpperCase();
             switch (move) {
                 // north
                 case "W":
@@ -121,13 +122,13 @@ public class UserInterface {
         } while (!w.isFloor(p));
         if (hasWon) {
             w.openLockedDoor();
-            if (!playingWithKeyboard) {
+            if (!playingWithInputString) {
                 w.render();
             }
             return;
         }
         w.placePlayerAtPosition(p);
-        if (!playingWithKeyboard) {
+        if (!playingWithInputString) {
             w.render();
         }
         playGame();
@@ -158,14 +159,14 @@ public class UserInterface {
     }
 
 
-    private long getSeedFromKeyboard() {
+    private long getSeedFromInputString() {
         StringBuilder s = new StringBuilder();
         String current = moves.poll();
         while (moves.size() > 0 && !current.equalsIgnoreCase("S")) {
             s.append(current);
             current = moves.poll();
         }
-       // System.out.println("Keyboard Seed: " + s);
+        // System.out.println("Keyboard Seed: " + s);
         return Long.parseLong(s.toString());
     }
 
@@ -194,7 +195,7 @@ public class UserInterface {
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
         w = new World(seed, tiles, WIDTH, HEIGHT);
         w.initialize();
-        if (!playingWithKeyboard) {
+        if (!playingWithInputString) {
             w.render();
         }
     }
@@ -217,7 +218,7 @@ public class UserInterface {
     }
 
     public String getMove() {
-        if (playingWithKeyboard) {
+        if (playingWithInputString) {
             return moves.poll();
         }
 
