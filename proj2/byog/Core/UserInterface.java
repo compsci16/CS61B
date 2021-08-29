@@ -48,7 +48,7 @@ public class UserInterface {
     }
 
     private void executeCommand(String command) throws IOException, ClassNotFoundException {
-        System.out.println(command);
+        // System.out.println(command);
         switch (command.toUpperCase()) {
             case "N":
                 long seed;
@@ -58,7 +58,7 @@ public class UserInterface {
                     drawFrame("(N)ew Game\n(L)oad\n(Q)uit\n \nEnter Seed");
                     seed = getSeedOnScreen();
                 }
-                System.out.println(seed);
+               // System.out.println(seed);
                 loadNewGame(seed);
                 playing = true;
                 playGame();
@@ -161,11 +161,11 @@ public class UserInterface {
     private long getSeedFromKeyboard() {
         StringBuilder s = new StringBuilder();
         String current = moves.poll();
-        while (moves.size() > 0 && !current.equals("S")) {
+        while (moves.size() > 0 && !current.equalsIgnoreCase("S")) {
             s.append(current);
             current = moves.poll();
         }
-        System.out.println("Keyboard Seed: " + s);
+       // System.out.println("Keyboard Seed: " + s);
         return Long.parseLong(s.toString());
     }
 
