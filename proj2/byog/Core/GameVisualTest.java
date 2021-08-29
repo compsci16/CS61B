@@ -18,7 +18,7 @@ public class GameVisualTest {
     @Test
     public void testInputStringPlay() throws IOException, ClassNotFoundException {
         TETile[][] worldKey=g.playWithInputString("n1914164012418174419saaadd");
-        TERenderer ter = new TERenderer();
+  //      TERenderer ter = new TERenderer();
 //        ter.initialize(worldKey.length, worldKey[0].length);
 //        ter.renderFrame(worldKey);
     }

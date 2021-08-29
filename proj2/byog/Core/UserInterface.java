@@ -211,7 +211,7 @@ public class UserInterface {
         StringBuilder s = new StringBuilder();
         int i = 0;
         while (i < n) {
-            if (playing) {
+            if (playing && !playingWithInputString) {
                 w.displayMousePosition();
             }
             while (StdDraw.hasNextKeyTyped() && i < n) {
