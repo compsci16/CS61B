@@ -7,9 +7,7 @@ import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.Color;
 import java.io.Serializable;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class World implements Serializable {
     private final Random RANDOM;
@@ -396,7 +394,6 @@ public class World implements Serializable {
         }
         return "vertical";
     }
-
 
     public void openLockedDoor() {
         world[lockedDoorPos.x()][lockedDoorPos.y()] = Tileset.UNLOCKED_DOOR;

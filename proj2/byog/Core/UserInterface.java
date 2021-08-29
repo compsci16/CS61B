@@ -110,6 +110,10 @@ public class UserInterface {
                 // pressed :
                 // command :Q saves and exits the game.
                 default:
+                    if (playingWithInputString && getMove().equalsIgnoreCase("Q")) {
+                        saveCurrentState();
+                        return;
+                    }
                     if (solicitNCharsInput(1).equalsIgnoreCase("Q")) {
                         saveCurrentState();
                         System.exit(0);

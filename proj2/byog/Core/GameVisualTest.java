@@ -6,6 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GameVisualTest {
     private Game g;
@@ -17,8 +21,11 @@ public class GameVisualTest {
 
     @Test
     public void testInputStringPlay() throws IOException, ClassNotFoundException {
-        TETile[][] worldKey=g.playWithInputString("n1914164012418174419saaadd");
-  //      TERenderer ter = new TERenderer();
+        TETile[][] world1 = g.playWithInputString("N999SDDDWWWDDD");
+        TETile[][] world2 = g.playWithInputString("N999SDDD:Q");
+        world2 = g.playWithInputString("LWWWDDD");
+        assertTrue(Arrays.deepEquals(world1, world2));
+        //      TERenderer ter = new TERenderer();
 //        ter.initialize(worldKey.length, worldKey[0].length);
 //        ter.renderFrame(worldKey);
     }
@@ -29,7 +36,7 @@ public class GameVisualTest {
     }
 
 
-    public static void main(String[] args)throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         Game g = new Game();
         TETile[][] worldKey = g.playWithInputString("N500SDWA");
         TERenderer ter = new TERenderer();
