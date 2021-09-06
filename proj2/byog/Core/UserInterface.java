@@ -87,7 +87,7 @@ public class UserInterface {
         Position p;
         boolean hasWon = false;
         do {
-            if (moves.size() == 0) {
+            if (playingWithInputString && moves.size() == 0) {
                 return;
             }
             String move = getMove().toUpperCase();

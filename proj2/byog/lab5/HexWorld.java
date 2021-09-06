@@ -1,9 +1,5 @@
 package byog.lab5;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
@@ -54,14 +50,19 @@ public class HexWorld {
         int y = p.y();
 
         // check edge cases
-        if (x < 0 || y < 0 || y >= HEIGHT || x >= WIDTH)
+        if (x < 0 || y < 0 || y >= HEIGHT || x >= WIDTH) {
             return;
+        }
         // check fitting
-        if (x + cols >= WIDTH || y - (2 * s - 1) < 0) // as tiles are filled from right row-wise to the bottom
+        if (x + cols >= WIDTH || y - (2 * s - 1) < 0)
+            // as tiles are filled from right row-wise to the bottom
+        {
             return;
+        }
 
-        if (occupied[x + s][y])
+        if (occupied[x + s][y]) {
             return;
+        }
 
         addTop(world, p, s, tile, cols);
         addBottom(world, p, s, tile, cols);
@@ -80,20 +81,24 @@ public class HexWorld {
 
     }
 
-    public void addHexagon2(TETile[][] world, Position p, int s, TETile tile){
+    public void addHexagon2(TETile[][] world, Position p, int s, TETile tile) {
         int cols = numberOfHexCols(s);
         int x = p.x();
         int y = p.y();
 
         // check edge cases
-        if (x < 0 || y < 0 || y >= HEIGHT || x >= WIDTH)
+        if (x < 0 || y < 0 || y >= HEIGHT || x >= WIDTH) {
             return;
+        }
         // check fitting
         if (x + cols >= WIDTH || y - (2 * s - 1) < 0) // as tiles are filled from right row-wise to the bottom
+        {
             return;
+        }
 
-        if (occupied[x + s][y])
+        if (occupied[x + s][y]) {
             return;
+        }
 
         addTop(world, p, s, tile, cols);
         addBottom(world, p, s, tile, cols);
