@@ -45,6 +45,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      * or null if this map contains no mapping for the key.
      */
     private V getHelper(K key, Node p) {
+        if(p == null)
+            return null;
         int compare = key.compareTo(p.key);
         if (compare == 0)
             return p.value;
@@ -130,4 +132,5 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     public Iterator<K> iterator() {
         throw new UnsupportedOperationException();
     }
+
 }
