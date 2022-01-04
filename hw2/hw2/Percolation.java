@@ -6,6 +6,7 @@ public class Percolation {
     // false = blocked, true = unblocked.
     private final boolean[][] grid;
     private final WeightedQuickUnionUF uf;
+    private final WeightedQuickUnionUF ufDup;
     private final int N;
     private int openSites = 0;
     private boolean percolates;
@@ -15,7 +16,8 @@ public class Percolation {
         this.N = N;
         grid = new boolean[N][N];
         // N*N = top pouring hole above the grid, N*N+1 = bottom hole
-        uf = new WeightedQuickUnionUF(N * N + 1);
+        uf = new WeightedQuickUnionUF(N * N + 2);
+        ufDup = new WeightedQuickUnionUF(N * N + 2);
     }
 
     // open the site (row, col) if it is not open already
@@ -27,14 +29,20 @@ public class Percolation {
         grid[row][col] = true;
         openSites++;
         establishConnections(row, col);
-        if (row == N - 1 && uf.connected(getIndex(row, col), N * N)) {
+        int index = getIndex(row, col);
+        if (uf.connected(index, N * N) && ufDup.connected(index, N * N + 1)) {
             percolates = true;
         }
     }
 
     private void establishConnections(int row, int col) {
+        // uf_grid connected to top tap
+        // dupUf_grid connected to bottom tap
         if (row == 0) {
             uf.union(getIndex(row, col), N * N);
+        }
+        if (row == N - 1) {
+            ufDup.union(getIndex(row, col), N * N + 1);
         }
         connect(row, col, row - 1, col);
         connect(row, col, row + 1, col);
@@ -46,6 +54,7 @@ public class Percolation {
         if (isValid(row1, col1) && isValid(row2, col2)
                 && isOpen(row1, col1) && isOpen(row2, col2)) {
             uf.union(getIndex(row1, col1), getIndex(row2, col2));
+            ufDup.union(getIndex(row1, col1), getIndex(row2, col2));
         }
     }
 
