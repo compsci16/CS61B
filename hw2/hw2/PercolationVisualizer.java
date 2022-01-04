@@ -16,10 +16,11 @@
  *
  ******************************************************************************/
 package hw2;
-import java.awt.Font;
 
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
+
+import java.awt.Font;
 
 public class PercolationVisualizer {
 
