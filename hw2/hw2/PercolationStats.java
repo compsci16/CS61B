@@ -9,6 +9,9 @@ public class PercolationStats {
     private final int T;
 
     public PercolationStats(int N, int T, PercolationFactory pf) {
+        if (N <= 0 || T <= 0) {
+            throw new IllegalArgumentException();
+        }
         x = new double[T];
         this.T = T;
         Percolation percolation;
@@ -17,7 +20,7 @@ public class PercolationStats {
             while (!percolation.percolates()) {
                 percolation.open(StdRandom.uniform(N), StdRandom.uniform(N));
             }
-            x[i] = 1.0 * percolation.numberOfOpenSites() / (N*N);
+            x[i] = 1.0 * percolation.numberOfOpenSites() / (N * N);
         }
     }
 

@@ -13,8 +13,9 @@ public class Percolation {
 
     // create N-by-N grid, with all sites initially blocked
     public Percolation(int N) {
-        if (N <= 0)
+        if (N <= 0) {
             throw new IllegalArgumentException();
+        }
         this.N = N;
         grid = new boolean[N][N];
         // N*N = top pouring hole above the grid, N*N+1 = bottom hole
@@ -27,7 +28,9 @@ public class Percolation {
         if (!isValid(row, col)) {
             throw new IndexOutOfBoundsException();
         }
-        if (grid[row][col]) return; // Already open
+        if (grid[row][col]) {
+            return; // Already open
+        }
 
         grid[row][col] = true;
         openSites++;
