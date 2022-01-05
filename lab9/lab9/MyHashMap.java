@@ -62,8 +62,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     @Override
     public void put(K key, V value) {
         int hash = hash(key);
+        if(buckets[hash].get(key) == null)
+            size++;
         buckets[hash].put(key, value);
-        size++;
         if (1.0 * size / buckets.length > MAX_LF) {
             ArrayMap<K, V>[] oldBuckets = buckets;
             buckets = new ArrayMap[2*size];
