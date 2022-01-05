@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
-    private static final int DEFAULT_SIZE = 16;
+    private static final int DEFAULT_SIZE = 1;
     private static final double MAX_LF = 0.75;
 
     private ArrayMap<K, V>[] buckets;
@@ -65,12 +65,18 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         if(buckets[hash].get(key) == null)
             size++;
         buckets[hash].put(key, value);
-        if (1.0 * size / buckets.length > MAX_LF) {
+        if (loadFactor() > MAX_LF) {
             ArrayMap<K, V>[] oldBuckets = buckets;
             buckets = new ArrayMap[2*size];
+
+            for (int i = 0; i < this.buckets.length; i += 1) {
+                this.buckets[i] = new ArrayMap<>();
+            }
+
+
             for (int i = 0; i < oldBuckets.length; i++) {
-                for(K k : oldBuckets[i]){
-                    buckets[hash(key)].put(k, oldBuckets[i].get(k));
+                for(K k : oldBuckets[i].keySet()){
+                    buckets[hash(k)].put(k, oldBuckets[i].get(k));
                 }
             }
         }
