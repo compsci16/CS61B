@@ -197,7 +197,25 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     @Override
     public void changePriority(T item, double priority) {
         /* TODO: Your code here! */
-        return;
+        int itemIndex = 1;
+        for (int i = 2; i <= size; i++) {
+            if (item.equals(contents[i])) {
+                itemIndex = i;
+                break;
+            }
+        }
+        contents[itemIndex].myPriority = priority;
+        Node leftItem = contents[leftIndex(itemIndex)];
+        Node rightItem = contents[rightIndex(itemIndex)];
+
+        int min =
+                leftItem == null && rightItem == null ?
+                        parentIndex(itemIndex) :
+                        min(min(leftIndex(itemIndex), rightIndex(itemIndex)), parentIndex(itemIndex));
+        if (priority > min)
+            sink(itemIndex);
+        else
+            swim(itemIndex);
     }
 
     /**
