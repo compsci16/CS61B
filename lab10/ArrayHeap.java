@@ -199,7 +199,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         /* TODO: Your code here! */
         int itemIndex = 1;
         for (int i = 2; i <= size; i++) {
-            if (item.equals(contents[i])) {
+            if (item.equals(contents[i].myItem)) {
                 itemIndex = i;
                 break;
             }
@@ -453,6 +453,26 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
             System.out.println(pq);
             i += 1;
         }
+    }
+
+
+    @Test
+    public void testIncreasingPriority(){
+        ExtrinsicPQ<String> pq = new ArrayHeap<>();
+        pq.insert("c", 3);
+        pq.insert("i", 9);
+        pq.insert("g", 7);
+        pq.insert("d", 4);
+        pq.insert("a", 1);
+        pq.insert("h", 8);
+        pq.insert("e", 5);
+        pq.insert("b", 2);
+        pq.insert("c", 3);
+        pq.insert("d", 4);
+
+        System.out.println("PQ After insertion:\n"+ pq);
+        pq.changePriority("b", 14);
+        System.out.println("PQ After insertion:\n"+ pq);
     }
 
 }
