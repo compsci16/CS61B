@@ -212,7 +212,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
                 leftItem == null && rightItem == null ?
                         parentIndex(itemIndex) :
                         min(min(leftIndex(itemIndex), rightIndex(itemIndex)), parentIndex(itemIndex));
-        if (priority > min)
+        if (priority > getNode(min).priority())
             sink(itemIndex);
         else
             swim(itemIndex);
@@ -457,7 +457,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
 
 
     @Test
-    public void testIncreasingPriority(){
+    public void testIncreasingPriority() {
         ExtrinsicPQ<String> pq = new ArrayHeap<>();
         pq.insert("c", 3);
         pq.insert("i", 9);
@@ -467,12 +467,14 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         pq.insert("h", 8);
         pq.insert("e", 5);
         pq.insert("b", 2);
-        pq.insert("c", 3);
-        pq.insert("d", 4);
 
-        System.out.println("PQ After insertion:\n"+ pq);
+        System.out.println("PQ After insertion:\n" + pq);
         pq.changePriority("b", 14);
-        System.out.println("PQ After insertion:\n"+ pq);
+        System.out.println("PQ After b-14:\n" + pq);
+        pq.changePriority("a", 17);
+        System.out.println("PQ After a-17:\n" + pq);
+        pq.changePriority("e", 2);
+        System.out.println("PQ After e-2:\n" + pq);
     }
 
 }
