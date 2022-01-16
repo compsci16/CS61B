@@ -17,7 +17,9 @@ public class Board implements WorldState {
     }
 
     public int tileAt(int i, int j) {
-        if (i < 0 || i >= N || j < 0 || j >= N) throw new IndexOutOfBoundsException();
+        if (i < 0 || i >= N || j < 0 || j >= N) {
+            throw new IndexOutOfBoundsException();
+        }
         return tiles[i][j];
     }
 
@@ -65,9 +67,12 @@ public class Board implements WorldState {
             int ham = 0;
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
-                    if (tiles[i][j] == 0) continue;
-                    if (getGoalVal(i, j) != tiles[i][j])
+                    if (tiles[i][j] == 0) {
+                        continue;
+                    }
+                    if (getGoalVal(i, j) != tiles[i][j]) {
                         ham++;
+                    }
                 }
             }
             hamming = ham;
@@ -76,7 +81,9 @@ public class Board implements WorldState {
     }
 
     private int getGoalVal(int i, int j) {
-        if (i == N - 1 && j == N - 1) return 0;
+        if (i == N - 1 && j == N - 1) {
+            return 0;
+        }
         return i * N + j + 1;
     }
 
@@ -87,7 +94,9 @@ public class Board implements WorldState {
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
                     int C = tiles[i][j];
-                    if (C == 0) continue;
+                    if (C == 0) {
+                        continue;
+                    }
                     int row = (C - 1) / N;
                     int col = (C - 1) - N * row;
 
@@ -106,8 +115,12 @@ public class Board implements WorldState {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Board board = (Board) o;
         return Arrays.deepEquals(tiles, board.tiles);
     }
@@ -126,7 +139,6 @@ public class Board implements WorldState {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        int N = size();
         s.append(N).append("\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {

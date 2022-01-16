@@ -18,7 +18,7 @@ public class Solver {
         private final SearchNode previous;
         private int cost;
 
-        public SearchNode(int moves, WorldState world, SearchNode previousMove) {
+        SearchNode(int moves, WorldState world, SearchNode previousMove) {
             this.world = world;
             this.moves = moves;
             this.previous = previousMove;
