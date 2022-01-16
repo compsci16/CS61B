@@ -6,10 +6,10 @@ public class WordPuzzleSolver {
      * Test routine for your Solver class. Uncomment and run to test
      * your basic functionality.
      **********************************************************************/
-    /*public static void main(String[] args) {
-        String start = "cube";
-        String goal = "tubes";
-
+    public static void main(String[] args) {
+        String start = "horse";
+        String goal = "nurse";
+        // horse -> hose -> hole -> cole -> core -> cure -> pure -> purse -> nurse
         Word startState = new Word(start, goal);
         Solver solver = new Solver(startState);
 
@@ -17,5 +17,5 @@ public class WordPuzzleSolver {
         for (WorldState ws : solver.solution()) {
             StdOut.println(ws);
         }
-    }*/
+    }
 }

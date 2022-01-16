@@ -1,9 +1,9 @@
 package hw4.puzzle;
 
+import edu.princeton.cs.algs4.In;
+
 import java.util.Set;
 import java.util.HashSet;
-
-import edu.princeton.cs.introcs.In;
 
 public class Word implements WorldState {
     private static Set<String> words;
