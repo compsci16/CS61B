@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Solver {
-    Deque<WorldState> solution;
+    private final Deque<WorldState> solution;
     private int minMoves;
     private final Map<WorldState, Integer> estimatedDistanceMap;
 
