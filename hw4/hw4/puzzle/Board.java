@@ -65,6 +65,7 @@ public class Board implements WorldState {
             int ham = 0;
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
+                    if (tiles[i][j] == 0) continue;
                     if (getGoalVal(i, j) != tiles[i][j])
                         ham++;
                 }
@@ -100,7 +101,7 @@ public class Board implements WorldState {
 
 
     public int estimatedDistanceToGoal() {
-        return manhattan();
+        return hamming();
     }
 
     @Override
