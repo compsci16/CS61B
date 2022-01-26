@@ -6,7 +6,10 @@ public class QuickSort {
      * <p>
      * The items in q2 will be catenated after all of the items in q1.
      */
-    private static <Item extends Comparable<Item>> Queue<Item> catenate(Queue<Item> q1, Queue<Item> q2) {
+    private static <Item extends Comparable<Item>> Queue<Item> catenate(
+            Queue<Item> q1,
+            Queue<Item> q2
+    ) {
         Queue<Item> catenated = new Queue<Item>();
         for (Item item : q1) {
             catenated.enqueue(item);
@@ -46,17 +49,18 @@ public class QuickSort {
      * @param greater  An empty Queue. When the function completes, this queue will contain
      *                 all of the items in unsorted that are greater than the given pivot.
      */
-    private static <Item extends Comparable<Item>> void
-    partition(Queue<Item> unsorted, Item pivot, Queue<Item> less,
-              Queue<Item> equal, Queue<Item> greater) {
+    private static <Item extends Comparable<Item>> void partition(
+            Queue<Item> unsorted, Item pivot, Queue<Item> less,
+            Queue<Item> equal, Queue<Item> greater) {
         for (Item i : unsorted) {
             int cmp = i.compareTo(pivot);
-            if (cmp == 0)
+            if (cmp == 0) {
                 equal.enqueue(i);
-            else if (cmp > 0)
+            } else if (cmp > 0) {
                 greater.enqueue(i);
-            else
+            } else {
                 less.enqueue(i);
+            }
         }
     }
 
@@ -65,7 +69,9 @@ public class QuickSort {
      */
     public static <Item extends Comparable<Item>> Queue<Item> quickSort(
             Queue<Item> items) {
-        if (items.size() == 1) return items;
+        if (items.size() == 1) {
+            return items;
+        }
         Queue<Item> equal = new Queue<>();
         Queue<Item> greater = new Queue<>();
         Queue<Item> lesser = new Queue<>();

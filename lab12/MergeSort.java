@@ -11,7 +11,9 @@ public class MergeSort {
      * @param q2 A Queue in sorted order from least to greatest.
      * @return The smallest item that is in q1 or q2.
      */
-    private static <Item extends Comparable<Item>> Item getMin(Queue<Item> q1, Queue<Item> q2) {
+    private static <Item extends Comparable<Item>> Item getMin(
+            Queue<Item> q1, Queue<Item> q2
+    ) {
         if (q1.isEmpty()) {
             return q2.dequeue();
         } else if (q2.isEmpty()) {
@@ -33,7 +35,9 @@ public class MergeSort {
     /**
      * Returns a queue of queues that each contain one item from items.
      */
-    private static <Item extends Comparable<Item>> Queue<Queue<Item>> makeSingleItemQueues(Queue<Item> items) {
+    private static <Item extends Comparable<Item>> Queue<Queue<Item>> makeSingleItemQueues(
+            Queue<Item> items
+    ) {
         Queue<Queue<Item>> queue = new Queue<>();
         for (Item i : items) {
             Queue<Item> toBeAdded = new Queue<>();
@@ -55,7 +59,10 @@ public class MergeSort {
      * @return A Queue containing all of the q1 and q2 in sorted order, from least to
      * greatest.
      */
-    private static <Item extends Comparable<Item>> Queue<Item> mergeSortedQueues(Queue<Item> q1, Queue<Item> q2) {
+    private static <Item extends Comparable<Item>> Queue<Item> mergeSortedQueues(
+            Queue<Item> q1,
+            Queue<Item> q2
+    ) {
         Queue<Item> sorted = new Queue<>();
         while (!q1.isEmpty() || !q2.isEmpty()) {
             sorted.enqueue(getMin(q1, q2));
@@ -66,7 +73,9 @@ public class MergeSort {
     /**
      * Returns a Queue that contains the given items sorted from least to greatest.
      */
-    public static <Item extends Comparable<Item>> Queue<Item> mergeSort(Queue<Item> items) {
+    public static <Item extends Comparable<Item>> Queue<Item> mergeSort(
+            Queue<Item> items
+    ) {
         Queue<Queue<Item>> q = makeSingleItemQueues(items);
         while (q.size() > 1) {
             q.enqueue(mergeSortedQueues(q.dequeue(), q.dequeue()));
